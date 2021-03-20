@@ -15,6 +15,8 @@ public interface MilestoneRepository {
 
     Optional<Milestone> getMilestone(int id);
 
+    void updateMilestoneExp(int id, double exp);
+
     double getMilestoneExp(int id);
 
 }
