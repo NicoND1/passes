@@ -11,6 +11,6 @@
 
   <groupId>de.bytemc.passes</groupId>
   <artifactId>api</artifactId>
-
+  <version>${version.api}</version>
 
 </project>
