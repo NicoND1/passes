@@ -13,10 +13,10 @@ public interface PassUser extends Collecting {
 
     UUID getUUID();
 
-    Collection<Pass> availablePasses();
-
     Collection<ActivePass> activePasses();
 
     void addPass(Pass pass);
+
+    void addExp(double exp);
 
 }

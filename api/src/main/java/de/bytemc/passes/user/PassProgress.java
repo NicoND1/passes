@@ -10,7 +10,7 @@ public class PassProgress {
     private int level;
     private double exp;
 
-    PassProgress(int level, double exp) {
+    public PassProgress(int level, double exp) {
         this.level = level;
         this.exp = exp;
     }
@@ -19,15 +19,12 @@ public class PassProgress {
         return level;
     }
 
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
     public double getExp() {
         return exp;
     }
 
-    public void setExp(double exp) {
+    void update(int level, double exp) {
+        this.level = level;
         this.exp = exp;
     }
 

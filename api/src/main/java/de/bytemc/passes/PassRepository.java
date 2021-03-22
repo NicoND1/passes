@@ -9,4 +9,6 @@ public interface PassRepository {
 
     Collection<Pass> getPasses();
 
+    Pass getPass(int id);
+
 }

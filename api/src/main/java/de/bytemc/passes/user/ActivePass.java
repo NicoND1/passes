@@ -2,9 +2,11 @@ package de.bytemc.passes.user;
 
 import com.google.common.base.Objects;
 import de.bytemc.passes.Pass;
+import de.bytemc.passes.PassLevel;
 
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 /**
  * @author Nico_ND1
@@ -35,8 +37,28 @@ public class ActivePass {
         return progress;
     }
 
+    public int addExp(double exp) {
+        int levelIncrement = 0;
+        PassLevel level = pass.getLevel(progress.getLevel());
+
+        while (exp + progress.getExp() >= level.getNeededExp()) {
+            levelIncrement++;
+            exp -= level.getNeededExp() - progress.getExp();
+            level = pass.getLevel(progress.getLevel() + levelIncrement);
+            collectableLevels.add(level.getLevel());
+        }
+        progress.update(progress.getLevel() + levelIncrement, exp);
+        return progress.getLevel();
+    }
+
     public Set<Integer> getCollectableLevels() {
         return collectableLevels;
+    }
+
+    public String formatCollectableLevels() {
+        return collectableLevels.stream()
+            .map(i -> Integer.toString(i))
+            .collect(Collectors.joining(","));
     }
 
     @Override

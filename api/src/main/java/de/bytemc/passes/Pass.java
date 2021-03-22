@@ -9,7 +9,7 @@ import java.util.Collection;
  */
 public interface Pass extends Collecting, Displayable {
 
-    boolean isActive();
+    int getID();
 
     Collection<PassLevel> getLevels();
 

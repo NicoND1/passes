@@ -13,6 +13,6 @@ public interface PassUserRepository {
 
     ListenableFuture<PassUser> getUser(UUID uuid);
 
-    ListenableFuture<PassUser> saveUser(UUID uuid);
+    void disableCollecting(UUID... uuids);
 
 }
