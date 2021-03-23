@@ -1,4 +1,4 @@
-package de.bytemc.passes;
+package de.bytemc.passes.level;
 
 import com.google.common.base.Objects;
 import de.bytemc.passes.reward.Reward;

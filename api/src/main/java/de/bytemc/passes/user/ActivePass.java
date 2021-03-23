@@ -2,7 +2,7 @@ package de.bytemc.passes.user;
 
 import com.google.common.base.Objects;
 import de.bytemc.passes.Pass;
-import de.bytemc.passes.PassLevel;
+import de.bytemc.passes.level.PassLevel;
 
 import java.util.Set;
 import java.util.StringJoiner;

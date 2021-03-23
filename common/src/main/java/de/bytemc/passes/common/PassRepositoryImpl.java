@@ -4,7 +4,8 @@ import de.bytemc.passes.Pass;
 import de.bytemc.passes.PassRepository;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -12,19 +13,23 @@ import java.util.Set;
  */
 public class PassRepositoryImpl implements PassRepository {
 
-    private final Set<Pass> passes;
+    private final Map<Integer, Pass> passes;
 
     public PassRepositoryImpl(Set<Pass> passes) {
-        this.passes = passes;
+        this.passes = new HashMap<>();
+
+        for (Pass pass : passes) {
+            this.passes.put(pass.getID(), pass);
+        }
     }
 
     @Override
     public Collection<Pass> getPasses() {
-        return Collections.unmodifiableCollection(passes);
+        return passes.values();
     }
 
     @Override
     public Pass getPass(int id) {
-        return null;
+        return passes.get(id);
     }
 }

@@ -1,8 +1,9 @@
 package de.bytemc.passes.common;
 
 import de.bytemc.passes.EventPass;
-import de.bytemc.passes.PassLevel;
 import de.bytemc.passes.icon.Icon;
+import de.bytemc.passes.level.PassLevel;
+import de.bytemc.passes.level.PassLevelConfiguration;
 
 import java.util.Date;
 import java.util.Set;
@@ -16,10 +17,15 @@ public class EventPassImpl extends AbstractPass implements EventPass {
     private final Date start;
     private final Date end;
 
-    protected EventPassImpl(int id, Icon icon, Date start, Date end, Set<PassLevel> levels) {
-        super(id, icon, levels);
+    public EventPassImpl(int id, Icon icon, Date start, Date end, Set<PassLevel> levels, PassLevelConfiguration levelConfiguration) {
+        super(id, icon, levels, levelConfiguration);
         this.start = start;
         this.end = end;
+    }
+
+    @Override
+    public PassType getType() {
+        return PassType.EVENT;
     }
 
     @Override

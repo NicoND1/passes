@@ -16,7 +16,6 @@ class FancyColorString {
     FancyColorString(String string) {
         this.indices = new HashSet<>();
 
-        StringBuilder stringBuilder = new StringBuilder();
         char[] chars = string.toCharArray();
         for (int i = 0; i < chars.length; i++) {
             char ch = chars[i];
@@ -27,14 +26,11 @@ class FancyColorString {
                 StringBuilder combiner = new StringBuilder().append(ch).append(nextChar);
                 if (combiner.toString().equals(INDICATOR)) {
                     indices.add(++i);
-
                 }
             }
-
-            stringBuilder.append(ch);
         }
 
-        this.string = stringBuilder.toString();
+        this.string = string;
     }
 
     String getString(char colorCode) {
@@ -44,6 +40,10 @@ class FancyColorString {
             builder.insert(index + skips++, colorCode);
         }
         return builder.toString();
+    }
+
+    String getRawString() {
+        return string;
     }
 
 }

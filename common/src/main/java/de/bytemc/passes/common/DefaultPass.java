@@ -1,7 +1,8 @@
 package de.bytemc.passes.common;
 
-import de.bytemc.passes.PassLevel;
 import de.bytemc.passes.icon.Icon;
+import de.bytemc.passes.level.PassLevel;
+import de.bytemc.passes.level.PassLevelConfiguration;
 
 import java.util.Set;
 import java.util.StringJoiner;
@@ -13,8 +14,13 @@ public class DefaultPass extends AbstractPass {
 
     private boolean collecting = true;
 
-    protected DefaultPass(int id, Icon icon, Set<PassLevel> levels) {
-        super(id, icon, levels);
+    public DefaultPass(int id, Icon icon, Set<PassLevel> levels, PassLevelConfiguration levelConfiguration) {
+        super(id, icon, levels, levelConfiguration);
+    }
+
+    @Override
+    public PassType getType() {
+        return PassType.DEFAULT;
     }
 
     @Override

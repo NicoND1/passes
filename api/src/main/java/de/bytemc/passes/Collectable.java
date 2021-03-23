@@ -3,7 +3,7 @@ package de.bytemc.passes;
 /**
  * @author Nico_ND1
  */
-public interface Collecting {
+public interface Collectable {
 
     boolean isCollecting();
 

@@ -8,8 +8,6 @@ import de.bytemc.passes.common.milestone.MilestoneRepositoryImpl;
 import de.bytemc.passes.milestone.MilestoneRepository;
 import de.bytemc.passes.user.PassUser;
 import de.bytemc.passes.user.PassUserRepository;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -21,10 +19,12 @@ public class PassesImpl implements Passes {
     private final PassRepository passes;
     private final MilestoneRepository milestones = new MilestoneRepositoryImpl();
     private final PassUserRepository users;
+    private final PlayersProvider playersProvider;
 
-    public PassesImpl(PassRepository passes, PassUserRepository users) {
+    public PassesImpl(PassRepository passes, PassUserRepository users, PlayersProvider playersProvider) {
         this.passes = passes;
         this.users = users;
+        this.playersProvider = playersProvider;
     }
 
     @Override
@@ -45,7 +45,7 @@ public class PassesImpl implements Passes {
     @Override
     public void broadcastMilestone(int id, UUID... uuids) {
         if (uuids == null || uuids.length == 0) {
-            uuids = Bukkit.getOnlinePlayers().stream().map(Player::getUniqueId).toArray(UUID[]::new);
+            uuids = playersProvider.getUUIDs();
         }
 
         double exp = milestones.getMilestoneExp(id);

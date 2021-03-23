@@ -1,6 +1,6 @@
 package de.bytemc.passes.user;
 
-import de.bytemc.passes.Collecting;
+import de.bytemc.passes.Collectable;
 import de.bytemc.passes.Pass;
 
 import java.util.Collection;
@@ -9,7 +9,7 @@ import java.util.UUID;
 /**
  * @author Nico_ND1
  */
-public interface PassUser extends Collecting {
+public interface PassUser extends Collectable {
 
     UUID getUUID();
 
