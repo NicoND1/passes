@@ -1,8 +1,9 @@
 package de.bytemc.passes.common;
 
 import de.bytemc.passes.Pass;
-import de.bytemc.passes.level.PassLevel;
 import de.bytemc.passes.icon.Icon;
+import de.bytemc.passes.level.PassLevel;
+import de.bytemc.passes.level.PassLevelConfiguration;
 
 import java.util.Collection;
 
@@ -22,6 +23,11 @@ public class UnknownPass implements Pass {
 
     @Override
     public PassLevel getLevel(int level) {
+        return null;
+    }
+
+    @Override
+    public PassLevelConfiguration levelConfiguration() {
         return null;
     }
 
