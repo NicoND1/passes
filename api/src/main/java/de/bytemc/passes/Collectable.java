@@ -5,10 +5,21 @@ package de.bytemc.passes;
  */
 public interface Collectable {
 
+    /**
+     * Get whether this is currently collecting or not.
+     *
+     * @return true, if this is collecting
+     */
     boolean isCollecting();
 
+    /**
+     * Enable collecting
+     */
     void enableCollecting();
 
+    /**
+     * Disable collecting
+     */
     void disableCollecting();
 
 }

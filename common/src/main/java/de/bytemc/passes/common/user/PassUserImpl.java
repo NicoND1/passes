@@ -50,11 +50,17 @@ public class PassUserImpl implements PassUser {
 
     @Override
     public Map<ActivePass, Integer> addExp(double exp) {
+        if (!isCollecting()) {
+            return Collections.emptyMap();
+        }
+
         Map<ActivePass, Integer> differences = new HashMap<>();
         for (ActivePass activePass : activePasses) {
-            differences.put(activePass, activePass.addExp(exp));
-            userRepository.update(activePass);
-            // TODO: Rethink this logic of updating everytime
+            if (activePass.getPass().isCollecting()) {
+                differences.put(activePass, activePass.addExp(exp));
+                userRepository.update(activePass);
+                // TODO: Rethink this logic of updating everytime
+            }
         }
         return differences;
     }

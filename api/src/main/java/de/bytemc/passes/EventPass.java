@@ -7,8 +7,18 @@ import java.util.Date;
  */
 public interface EventPass extends Pass {
 
+    /**
+     * Get the {@link Date} from where this {@link EventPass} is collecting from.
+     *
+     * @return the {@link Date}
+     */
     Date getStart();
 
+    /**
+     * Get the {@link Date} to where this {@link EventPass} is collecting to.
+     *
+     * @return the {@link Date}
+     */
     Date getEnd();
 
 }

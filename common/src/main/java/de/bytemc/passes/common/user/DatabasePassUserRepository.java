@@ -85,7 +85,9 @@ public class DatabasePassUserRepository implements PassUserRepository {
 
     @Override
     public ListenableFuture<PassUser> getUser(UUID uuid) {
-        return userCache.get(uuid);
+        SettableFuture<PassUser> instantFuture = SettableFuture.create();
+        instantFuture.set(null);
+        return userCache.getOrDefault(uuid, instantFuture);
     }
 
     @Override

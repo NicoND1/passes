@@ -8,6 +8,11 @@ import de.bytemc.passes.user.PassUser;
  */
 public interface Reward extends Displayable {
 
+    /**
+     * Collect this reward to the given {@link PassUser}.
+     *
+     * @param passUser the user to give this reward to
+     */
     void collect(PassUser passUser);
 
 }
