@@ -4,6 +4,7 @@ import de.bytemc.passes.Collectable;
 import de.bytemc.passes.Pass;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -17,6 +18,6 @@ public interface PassUser extends Collectable {
 
     void addPass(Pass pass);
 
-    void addExp(double exp);
+    Map<ActivePass, Integer> addExp(double exp);
 
 }

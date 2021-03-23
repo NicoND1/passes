@@ -48,7 +48,7 @@ public class ActivePass {
             collectableLevels.add(level.getLevel());
         }
         progress.update(progress.getLevel() + levelIncrement, exp);
-        return progress.getLevel();
+        return levelIncrement;
     }
 
     public Set<Integer> getCollectableLevels() {

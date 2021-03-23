@@ -8,7 +8,9 @@ import de.bytemc.passes.user.PassUser;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.UUID;
@@ -47,13 +49,14 @@ public class PassUserImpl implements PassUser {
     }
 
     @Override
-    public void addExp(double exp) {
+    public Map<ActivePass, Integer> addExp(double exp) {
+        Map<ActivePass, Integer> differences = new HashMap<>();
         for (ActivePass activePass : activePasses) {
-            int levelDifference = activePass.addExp(exp);
-            if (levelDifference > 0) {
-                userRepository.update(activePass);
-            }
+            differences.put(activePass, activePass.addExp(exp));
+            userRepository.update(activePass);
+            // TODO: Rethink this logic of updating everytime
         }
+        return differences;
     }
 
     @Override

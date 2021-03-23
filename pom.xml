@@ -10,6 +10,7 @@
   <modules>
     <module>api</module>
     <module>common</module>
+    <module>spigot</module>
   </modules>
   <packaging>pom</packaging>
 
