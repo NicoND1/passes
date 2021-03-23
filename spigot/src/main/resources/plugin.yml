@@ -2,3 +2,7 @@ name: passes
 author: Nico_ND1
 version: ${project.version}
 main: de.bytemc.passes.spigot.PassesPlugin
+
+commands:
+    broadcastmilestone:
+        permission: passes.command.debug

@@ -11,6 +11,7 @@ import de.bytemc.passes.common.config.PassesConfigLoader;
 import de.bytemc.passes.common.user.ConnectionFactory;
 import de.bytemc.passes.common.user.DatabasePassUserRepository;
 import de.bytemc.passes.milestone.Milestone;
+import de.bytemc.passes.spigot.command.BroadcastMilestoneCommand;
 import de.bytemc.passes.user.PassUserRepository;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.ServicePriority;
@@ -35,6 +36,8 @@ public class PassesPlugin extends JavaPlugin implements PlayersProvider {
         for (Milestone milestone : config.getDefaultMilestones()) {
             passes.milestoneRepository().registerMilestone(milestone.getID(), milestone.getExp());
         }
+
+        getCommand("broadcastmilestone").setExecutor(new BroadcastMilestoneCommand(passes));
     }
 
     private PassesConfig readConfig() {
