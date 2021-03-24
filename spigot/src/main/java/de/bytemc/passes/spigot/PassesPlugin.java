@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -38,11 +39,13 @@ public class PassesPlugin extends JavaPlugin implements PlayersProvider {
         }
 
         getCommand("broadcastmilestone").setExecutor(new BroadcastMilestoneCommand(passes));
+
+        getLogger().info("Loaded " + passRepository.getPasses().size() + " passes");
     }
 
     private PassesConfig readConfig() {
         try {
-            return PassesConfigLoader.readConfig(getFile());
+            return PassesConfigLoader.readConfig(new File(getDataFolder(), "config.yml"));
         } catch (IOException exception) {
             exception.printStackTrace();
         }

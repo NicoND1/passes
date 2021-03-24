@@ -34,7 +34,7 @@ import java.util.Set;
 public class GsonPass implements JsonSerializer<Pass>, JsonDeserializer<Pass> {
 
     @Override
-    public JsonElement serialize(Pass pass, Type type, JsonSerializationContext serializationContext) {
+    public JsonElement serialize(Pass pass, Type type1, JsonSerializationContext serializationContext) {
         JsonObject result = new JsonObject();
         if (!(pass instanceof AbstractPass)) {
             result.addProperty("type", PassType.DEFAULT.name());
@@ -42,11 +42,14 @@ public class GsonPass implements JsonSerializer<Pass>, JsonDeserializer<Pass> {
         }
 
         AbstractPass abstractPass = (AbstractPass) pass;
-        result.addProperty("type", abstractPass.getType().name());
+        PassType type = abstractPass.getType();
+        result.addProperty("type", type.name());
         result.addProperty("id", abstractPass.getID());
         result.add("icon", serializationContext.serialize(pass.getIcon()));
         result.add("levels", writeLevelsJsonArray(pass));
-        writeEventPass(pass, result);
+        if (type == PassType.EVENT) {
+            writeEventPass(pass, result);
+        }
         return result;
     }
 
@@ -57,8 +60,15 @@ public class GsonPass implements JsonSerializer<Pass>, JsonDeserializer<Pass> {
             levelObject.addProperty("level", level.getLevel());
             levelObject.addProperty("neededExp", level.getNeededExp());
             // TODO: Write rewards
+            array.add(levelObject);
         }
         return array;
+    }
+
+    private void writeEventPass(Pass pass, JsonObject result) {
+        EventPass eventPass = (EventPass) pass;
+        result.addProperty("start", eventPass.getStart().getTime());
+        result.addProperty("end", eventPass.getEnd().getTime());
     }
 
     @Override
@@ -105,12 +115,6 @@ public class GsonPass implements JsonSerializer<Pass>, JsonDeserializer<Pass> {
             map.put(state, deserializationContext.deserialize(object.get(stateName), Icon.class));
         }
         return new PassLevelConfiguration(map);
-    }
-
-    private void writeEventPass(Pass pass, JsonObject result) {
-        EventPass eventPass = (EventPass) pass;
-        result.addProperty("start", eventPass.getStart().getTime());
-        result.addProperty("end", eventPass.getEnd().getTime());
     }
 
 }

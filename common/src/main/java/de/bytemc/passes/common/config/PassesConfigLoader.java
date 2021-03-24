@@ -61,6 +61,11 @@ public class PassesConfigLoader {
     }
 
     public static void saveConfig(File file, PassesConfig config) throws IOException {
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+        }
+
         String jsonString = GSON.toJson(config);
         try (FileWriter fileWriter = new FileWriter(file)) {
             fileWriter.write(jsonString);
