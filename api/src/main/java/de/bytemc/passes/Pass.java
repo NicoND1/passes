@@ -3,6 +3,7 @@ package de.bytemc.passes;
 import de.bytemc.passes.icon.Displayable;
 import de.bytemc.passes.level.PassLevel;
 import de.bytemc.passes.level.PassLevelConfiguration;
+import de.bytemc.passes.payment.Payment;
 
 import java.util.Collection;
 
@@ -35,5 +36,8 @@ public interface Pass extends Collectable, Displayable {
 
     @Deprecated
     PassLevelConfiguration levelConfiguration();
+
+    // TODO
+    Payment getPrice();
 
 }

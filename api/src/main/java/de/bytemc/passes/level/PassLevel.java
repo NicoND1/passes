@@ -1,7 +1,7 @@
 package de.bytemc.passes.level;
 
 import com.google.common.base.Objects;
-import de.bytemc.passes.reward.Reward;
+import de.bytemc.passes.payment.Payment;
 
 import java.util.Set;
 import java.util.StringJoiner;
@@ -13,9 +13,9 @@ public class PassLevel {
 
     private final int level;
     private final double neededExp;
-    private final Set<Reward> rewards;
+    private final Set<Payment> rewards;
 
-    public PassLevel(int level, double neededExp, Set<Reward> rewards) {
+    public PassLevel(int level, double neededExp, Set<Payment> rewards) {
         this.level = level;
         this.neededExp = neededExp;
         this.rewards = rewards;
@@ -29,7 +29,7 @@ public class PassLevel {
         return neededExp;
     }
 
-    public Set<Reward> getRewards() {
+    public Set<Payment> getRewards() {
         return rewards;
     }
 

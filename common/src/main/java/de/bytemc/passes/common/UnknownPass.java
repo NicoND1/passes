@@ -4,6 +4,7 @@ import de.bytemc.passes.Pass;
 import de.bytemc.passes.icon.Icon;
 import de.bytemc.passes.level.PassLevel;
 import de.bytemc.passes.level.PassLevelConfiguration;
+import de.bytemc.passes.payment.Payment;
 
 import java.util.Collection;
 
@@ -28,6 +29,11 @@ public class UnknownPass implements Pass {
 
     @Override
     public PassLevelConfiguration levelConfiguration() {
+        return null;
+    }
+
+    @Override
+    public Payment getPrice() {
         return null;
     }
 

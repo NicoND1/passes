@@ -4,6 +4,7 @@ import de.bytemc.passes.EventPass;
 import de.bytemc.passes.icon.Icon;
 import de.bytemc.passes.level.PassLevel;
 import de.bytemc.passes.level.PassLevelConfiguration;
+import de.bytemc.passes.payment.Payment;
 
 import java.util.Date;
 import java.util.Set;
@@ -17,8 +18,8 @@ public class EventPassImpl extends AbstractPass implements EventPass {
     private final Date start;
     private final Date end;
 
-    public EventPassImpl(int id, Icon icon, Date start, Date end, Set<PassLevel> levels, PassLevelConfiguration levelConfiguration) {
-        super(id, icon, levels, levelConfiguration);
+    public EventPassImpl(int id, Icon icon, Date start, Date end, Set<PassLevel> levels, PassLevelConfiguration levelConfiguration, Payment price) {
+        super(id, icon, levels, levelConfiguration, price);
         this.start = start;
         this.end = end;
     }
@@ -60,6 +61,7 @@ public class EventPassImpl extends AbstractPass implements EventPass {
             .add("id=" + id)
             .add("icon=" + icon)
             .add("levels=" + levels)
+            .add("price=" + price)
             .toString();
     }
 }

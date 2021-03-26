@@ -5,6 +5,7 @@ import de.bytemc.passes.Pass;
 import de.bytemc.passes.icon.Icon;
 import de.bytemc.passes.level.PassLevel;
 import de.bytemc.passes.level.PassLevelConfiguration;
+import de.bytemc.passes.payment.Payment;
 
 import java.util.Collection;
 import java.util.Map;
@@ -19,10 +20,12 @@ public abstract class AbstractPass implements Pass {
     protected final Icon icon;
     protected final Map<Integer, PassLevel> levels;
     protected final PassLevelConfiguration levelConfiguration;
+    protected final Payment price;
 
-    protected AbstractPass(int id, Icon icon, Set<PassLevel> levels, PassLevelConfiguration levelConfiguration) {
+    protected AbstractPass(int id, Icon icon, Set<PassLevel> levels, PassLevelConfiguration levelConfiguration, Payment price) {
         this.id = id;
         this.icon = icon;
+        this.price = price;
         this.levels = Maps.newConcurrentMap();
         for (PassLevel level : levels) {
             this.levels.put(level.getLevel(), level);
@@ -30,9 +33,10 @@ public abstract class AbstractPass implements Pass {
         this.levelConfiguration = levelConfiguration;
     }
 
-    protected AbstractPass(int id, Icon icon, Map<Integer, PassLevel> levels, PassLevelConfiguration levelConfiguration) {
+    protected AbstractPass(int id, Icon icon, Map<Integer, PassLevel> levels, PassLevelConfiguration levelConfiguration, Payment price) {
         this.id = id;
         this.icon = icon;
+        this.price = price;
         this.levels = Maps.newConcurrentMap();
         this.levels.putAll(levels);
         this.levelConfiguration = levelConfiguration;
@@ -63,5 +67,10 @@ public abstract class AbstractPass implements Pass {
     @Override
     public PassLevelConfiguration levelConfiguration() {
         return levelConfiguration;
+    }
+
+    @Override
+    public Payment getPrice() {
+        return price;
     }
 }

@@ -30,11 +30,11 @@ import java.util.stream.Collectors;
  */
 public class DatabasePassUserRepository implements PassUserRepository {
 
-    private static final String SELECT_USER = "SELECT * FROM users WHERE uuid=?;";
-    private static final String INSERT_USER_PASS = "INSERT INTO users(uuid, pass_id, level, exp, collectable_levels) VALUES (?, ?, ?, ?, ?);";
-    private static final String UPDATE_USER_PASS = "UPDATE users SET level=?, exp=?, collectable_levels=? WHERE uuid=? AND pass_id=?;";
-    private static final String UPDATE_USER_PASS_PROGRESS = "UPDATE users SET level=?, exp=? WHERE uuid=? AND pass_id=?;";
-    private static final String UPDATE_USER_PASS_COLLECTABLE_LEVELS = "UPDATE users SET collectable_levels=? WHERE uuid=? AND pass_id=?;";
+    private static final String SELECT_USER = "SELECT * FROM passes_users WHERE uuid=?;";
+    private static final String INSERT_USER_PASS = "INSERT INTO passes_users(uuid, pass_id, level, exp, collectable_levels) VALUES (?, ?, ?, ?, ?);";
+    private static final String UPDATE_USER_PASS = "UPDATE passes_users SET level=?, exp=?, collectable_levels=? WHERE uuid=? AND pass_id=?;";
+    private static final String UPDATE_USER_PASS_PROGRESS = "UPDATE passes_users SET level=?, exp=? WHERE uuid=? AND pass_id=?;";
+    private static final String UPDATE_USER_PASS_COLLECTABLE_LEVELS = "UPDATE passes_users SET collectable_levels=? WHERE uuid=? AND pass_id=?;";
 
     private final Map<UUID, ListenableFuture<PassUser>> userCache = Maps.newConcurrentMap();
     private final ConnectionFactory connectionFactory;
@@ -67,14 +67,14 @@ public class DatabasePassUserRepository implements PassUserRepository {
                     int passID = resultSet.getInt("pass_id");
                     PassProgress progress = new PassProgress(resultSet.getInt("level"), resultSet.getDouble("exp"));
                     String levels = resultSet.getString("collectable_levels");
-                    Set<Integer> collectableLevels = Arrays.stream(levels.split(",")).map(Integer::parseInt).collect(Collectors.toSet());
 
                     Pass pass = passRepository.getPass(passID);
-                    ActivePass activePass = new ActivePass(user, pass, progress, collectableLevels);
+                    ActivePass activePass = new ActivePass(user, pass, progress, readCollectableLevels(levels));
                     passes.add(activePass);
                 }
                 statement.close();
 
+                checkUnassignedPasses(user);
                 future.set(user);
             } catch (SQLException exception) {
                 future.setException(exception);
@@ -83,11 +83,53 @@ public class DatabasePassUserRepository implements PassUserRepository {
         return future;
     }
 
+    private Set<Integer> readCollectableLevels(String levels) {
+        Set<Integer> collectableLevels = Arrays.stream(levels.split(",")).map(s -> {
+            if (s.equals("")) {
+                return -1;
+            }
+            return Integer.parseInt(s);
+        }).collect(Collectors.toSet());
+        collectableLevels.remove(-1);
+        return collectableLevels;
+    }
+
+    private void checkUnassignedPasses(PassUser passUser) {
+        outer:
+        for (Pass pass : passRepository.getPasses()) {
+            for (ActivePass activePass : passUser.activePasses()) {
+                if (activePass.getPass().equals(pass)) {
+                    continue outer;
+                }
+            }
+
+            Futures.addCallback(pass.getPrice().canAfford(passUser), new FutureCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean aBoolean) {
+                    if (aBoolean != null && aBoolean) {
+                        passUser.addPass(pass);
+                        pass.getPrice().use(passUser);
+                    }
+                }
+
+                @Override
+                public void onFailure(Throwable throwable) {
+                    throwable.printStackTrace();
+                }
+            });
+        }
+    }
+
     @Override
     public ListenableFuture<PassUser> getUser(UUID uuid) {
         SettableFuture<PassUser> instantFuture = SettableFuture.create();
         instantFuture.set(null);
         return userCache.getOrDefault(uuid, instantFuture);
+    }
+
+    @Override
+    public void invalidateUser(UUID uuid) {
+        userCache.remove(uuid);
     }
 
     @Override
@@ -132,8 +174,9 @@ public class DatabasePassUserRepository implements PassUserRepository {
         update(UPDATE_USER_PASS, statement -> {
             statement.setInt(1, progress.getLevel());
             statement.setDouble(2, progress.getExp());
-            statement.setString(3, user.getUUID().toString());
-            statement.setInt(4, pass.getID());
+            statement.setString(3, activePass.formatCollectableLevels());
+            statement.setString(4, user.getUUID().toString());
+            statement.setInt(5, pass.getID());
         });
     }
 
@@ -145,7 +188,6 @@ public class DatabasePassUserRepository implements PassUserRepository {
         update(UPDATE_USER_PASS_PROGRESS, statement -> {
             statement.setInt(1, progress.getLevel());
             statement.setDouble(2, progress.getExp());
-            statement.setString(3, activePass.formatCollectableLevels());
             statement.setString(4, user.getUUID().toString());
             statement.setInt(5, pass.getID());
         });

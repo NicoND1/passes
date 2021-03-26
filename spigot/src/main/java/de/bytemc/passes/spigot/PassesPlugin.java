@@ -8,10 +8,13 @@ import de.bytemc.passes.common.PassesImpl;
 import de.bytemc.passes.common.PlayersProvider;
 import de.bytemc.passes.common.config.PassesConfig;
 import de.bytemc.passes.common.config.PassesConfigLoader;
+import de.bytemc.passes.common.payment.PaymentRepositoryImpl;
 import de.bytemc.passes.common.user.ConnectionFactory;
 import de.bytemc.passes.common.user.DatabasePassUserRepository;
 import de.bytemc.passes.milestone.Milestone;
+import de.bytemc.passes.payment.PaymentRepository;
 import de.bytemc.passes.spigot.command.BroadcastMilestoneCommand;
+import de.bytemc.passes.spigot.listener.CacheListener;
 import de.bytemc.passes.user.PassUserRepository;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.ServicePriority;
@@ -28,6 +31,8 @@ public class PassesPlugin extends JavaPlugin implements PlayersProvider {
 
     @Override
     public void onEnable() {
+        PaymentRepository paymentRepository = new PaymentRepositoryImpl();
+        PassesConfigLoader.init(paymentRepository);
         PassesConfig config = readConfig();
         PassRepository passRepository = new PassRepositoryImpl(config.getPasses());
         PassUserRepository userRepository = new DatabasePassUserRepository(getConnectionFactory(), passRepository);
@@ -39,6 +44,7 @@ public class PassesPlugin extends JavaPlugin implements PlayersProvider {
         }
 
         getCommand("broadcastmilestone").setExecutor(new BroadcastMilestoneCommand(passes));
+        getServer().getPluginManager().registerEvents(new CacheListener(userRepository), this);
 
         getLogger().info("Loaded " + passRepository.getPasses().size() + " passes");
     }

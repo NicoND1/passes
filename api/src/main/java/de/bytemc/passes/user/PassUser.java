@@ -1,11 +1,9 @@
 package de.bytemc.passes.user;
 
 import de.bytemc.passes.Collectable;
-import de.bytemc.passes.EventPass;
 import de.bytemc.passes.Pass;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
@@ -30,9 +28,6 @@ public interface PassUser extends Collectable {
 
     /**
      * Adds the given {@link Pass} to this user's passes.
-     * <p>
-     * It doesn't have to mean the pass will be in {@link PassUser#activePasses()}, as f.e. an {@link EventPass} is
-     * bound to 2 specific {@link Date dates}
      *
      * @param pass the pass to add
      */

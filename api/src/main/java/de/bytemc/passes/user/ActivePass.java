@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import de.bytemc.passes.Pass;
 import de.bytemc.passes.level.PassLevel;
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
@@ -52,7 +53,7 @@ public class ActivePass {
     }
 
     public Set<Integer> getCollectableLevels() {
-        return collectableLevels;
+        return Collections.unmodifiableSet(collectableLevels);
     }
 
     public String formatCollectableLevels() {

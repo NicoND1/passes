@@ -27,6 +27,13 @@ public interface PassUserRepository {
     ListenableFuture<PassUser> getUser(UUID uuid);
 
     /**
+     * Invalidate the {@link PassUser} bound to the given {@link UUID} from the cache.
+     *
+     * @param uuid the uuid of the user
+     */
+    void invalidateUser(UUID uuid);
+
+    /**
      * {@link Collectable#disableCollecting() Disables collecting} of every {@link PassUser} matching a {@link UUID}
      * from the given array.
      *
