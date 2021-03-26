@@ -36,7 +36,7 @@ public class PassesPlugin extends JavaPlugin implements PlayersProvider {
         PassesConfig config = readConfig();
         PassRepository passRepository = new PassRepositoryImpl(config.getPasses());
         PassUserRepository userRepository = new DatabasePassUserRepository(getConnectionFactory(), passRepository);
-        Passes passes = new PassesImpl(passRepository, userRepository, this);
+        Passes passes = new PassesImpl(passRepository, userRepository, this, paymentRepository);
         getServer().getServicesManager().register(Passes.class, passes, this, ServicePriority.Normal);
 
         for (Milestone milestone : config.getDefaultMilestones()) {

@@ -10,6 +10,7 @@ import de.bytemc.passes.Passes;
 import de.bytemc.passes.common.milestone.MilestoneRepositoryImpl;
 import de.bytemc.passes.milestone.MilestoneBroadcastResult;
 import de.bytemc.passes.milestone.MilestoneRepository;
+import de.bytemc.passes.payment.PaymentRepository;
 import de.bytemc.passes.user.ActivePass;
 import de.bytemc.passes.user.PassUser;
 import de.bytemc.passes.user.PassUserRepository;
@@ -27,11 +28,13 @@ public class PassesImpl implements Passes {
     private final MilestoneRepository milestones = new MilestoneRepositoryImpl();
     private final PassUserRepository users;
     private final PlayersProvider playersProvider;
+    private final PaymentRepository payments;
 
-    public PassesImpl(PassRepository passes, PassUserRepository users, PlayersProvider playersProvider) {
+    public PassesImpl(PassRepository passes, PassUserRepository users, PlayersProvider playersProvider, PaymentRepository payments) {
         this.passes = passes;
         this.users = users;
         this.playersProvider = playersProvider;
+        this.payments = payments;
     }
 
     @Override
@@ -47,6 +50,11 @@ public class PassesImpl implements Passes {
     @Override
     public PassUserRepository passUserRepository() {
         return users;
+    }
+
+    @Override
+    public PaymentRepository paymentRepository() {
+        return payments;
     }
 
     @Override
