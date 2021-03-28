@@ -45,7 +45,7 @@ public class GsonIcon implements JsonSerializer<Icon>, JsonDeserializer<Icon> {
         JsonObject object = jsonElement.getAsJsonObject();
         Icon.Builder iconBuilder = Icon.builder(object.get("material").getAsString())
             .amount(object.get("amount").getAsInt())
-            .durability(object.get("durability").getAsShort());
+            .durabilities(object.get("durabilities").getAsJsonArray());
         if (object.has("name")) {
             iconBuilder.name(object.get("name").getAsString());
         }

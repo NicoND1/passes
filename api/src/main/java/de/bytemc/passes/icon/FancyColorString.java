@@ -1,45 +1,26 @@
 package de.bytemc.passes.icon;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.text.MessageFormat;
 
 /**
  * @author Nico_ND1
  */
 class FancyColorString {
 
-    private static final String INDICATOR = "§?";
-
     private final String string;
-    private final Set<Integer> indices;
+    private final MessageFormat format;
 
     FancyColorString(String string) {
-        this.indices = new HashSet<>();
-
-        char[] chars = string.toCharArray();
-        for (int i = 0; i < chars.length; i++) {
-            char ch = chars[i];
-
-            if (i != chars.length - 1) {
-                char nextChar = chars[i + 1];
-
-                StringBuilder combiner = new StringBuilder().append(ch).append(nextChar);
-                if (combiner.toString().equals(INDICATOR)) {
-                    indices.add(++i);
-                }
-            }
+        if (string != null) {
+            this.format = new MessageFormat(string);
+        } else {
+            this.format = null;
         }
-
         this.string = string;
     }
 
-    String getString(char colorCode) {
-        StringBuilder builder = new StringBuilder(string);
-        int skips = 0;
-        for (int index : indices) {
-            builder.insert(index + skips++, colorCode);
-        }
-        return builder.toString();
+    String getString(Object... args) {
+        return format == null ? null : format.format(args);
     }
 
     String getRawString() {

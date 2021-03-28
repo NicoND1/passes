@@ -37,7 +37,6 @@ public interface Pass extends Collectable, Displayable {
     @Deprecated
     PassLevelConfiguration levelConfiguration();
 
-    // TODO
     Payment getPrice();
 
 }

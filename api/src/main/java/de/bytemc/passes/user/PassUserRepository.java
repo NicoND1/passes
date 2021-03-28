@@ -14,7 +14,7 @@ public interface PassUserRepository {
      * Loads a {@link PassUser} from the database or gets it if already cached locally.
      *
      * @param uuid the {@link UUID} of the user
-     * @return a {@link ListenableFuture<PassUser> future} storing the user
+     * @return a {@link ListenableFuture future} storing the user
      */
     ListenableFuture<PassUser> loadUser(UUID uuid);
 
@@ -22,7 +22,7 @@ public interface PassUserRepository {
      * Gets a {@link PassUser} from the cache.
      *
      * @param uuid the {@link UUID} of the user
-     * @return a {@link ListenableFuture<PassUser> future} storing the user or null
+     * @return a {@link ListenableFuture future} storing the user or null
      */
     ListenableFuture<PassUser> getUser(UUID uuid);
 

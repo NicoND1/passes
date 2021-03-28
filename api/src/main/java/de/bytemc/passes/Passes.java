@@ -57,4 +57,9 @@ public interface Passes {
         return broadcastMilestone(milestone.getID(), uuids);
     }
 
+    // TODO: javadoc
+    boolean onlyCollect();
+
+    void setOnlyCollect(boolean onlyCollect);
+
 }

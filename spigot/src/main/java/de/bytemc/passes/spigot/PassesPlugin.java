@@ -12,7 +12,6 @@ import de.bytemc.passes.common.payment.PaymentRepositoryImpl;
 import de.bytemc.passes.common.user.ConnectionFactory;
 import de.bytemc.passes.common.user.DatabasePassUserRepository;
 import de.bytemc.passes.milestone.Milestone;
-import de.bytemc.passes.payment.PaymentRepository;
 import de.bytemc.passes.spigot.command.BroadcastMilestoneCommand;
 import de.bytemc.passes.spigot.listener.CacheListener;
 import de.bytemc.passes.user.PassUserRepository;
@@ -29,15 +28,19 @@ import java.util.UUID;
  */
 public class PassesPlugin extends JavaPlugin implements PlayersProvider {
 
+    private Passes passes;
+
     @Override
     public void onEnable() {
-        PaymentRepository paymentRepository = new PaymentRepositoryImpl();
+        PaymentRepositoryImpl paymentRepository = new PaymentRepositoryImpl();
         PassesConfigLoader.init(paymentRepository);
         PassesConfig config = readConfig();
         PassRepository passRepository = new PassRepositoryImpl(config.getPasses());
-        PassUserRepository userRepository = new DatabasePassUserRepository(getConnectionFactory(), passRepository);
-        Passes passes = new PassesImpl(passRepository, userRepository, this, paymentRepository);
+        PassUserRepository userRepository = new DatabasePassUserRepository(getConnectionFactory(), passRepository, () -> passes.onlyCollect());
+        this.passes = new PassesImpl(passRepository, userRepository, this, paymentRepository, config.onlyCollect());
+        paymentRepository.setPasses(passes);
         getServer().getServicesManager().register(Passes.class, passes, this, ServicePriority.Normal);
+        getServer().getServicesManager().register(BukkitIcon.class, new BukkitIcon(), this, ServicePriority.Normal);
 
         for (Milestone milestone : config.getDefaultMilestones()) {
             passes.milestoneRepository().registerMilestone(milestone.getID(), milestone.getExp());
@@ -51,7 +54,7 @@ public class PassesPlugin extends JavaPlugin implements PlayersProvider {
 
     private PassesConfig readConfig() {
         try {
-            return PassesConfigLoader.readConfig(new File(getDataFolder(), "config.yml"));
+            return PassesConfigLoader.readConfig(new File(getDataFolder(), "config.json"));
         } catch (IOException exception) {
             exception.printStackTrace();
         }

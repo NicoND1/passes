@@ -10,7 +10,7 @@ public interface PassRepository {
     /**
      * Get every pass registered.
      *
-     * @return an unmodifiable {@link Collection<Pass>} with every registered {@link Pass}
+     * @return an unmodifiable {@link Collection} with every registered {@link Pass}
      */
     Collection<Pass> getPasses();
 

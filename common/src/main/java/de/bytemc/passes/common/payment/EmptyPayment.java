@@ -1,7 +1,6 @@
 package de.bytemc.passes.common.payment;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.SettableFuture;
 import de.bytemc.passes.payment.Payment;
 import de.bytemc.passes.user.PassUser;
 
@@ -12,8 +11,14 @@ import java.util.Map;
  * @author Nico_ND1
  */
 public class EmptyPayment extends Payment {
-    public EmptyPayment() {
-        super(new HashMap<>());
+
+    private final String originalType;
+    private final Map<String, String> originalData;
+
+    public EmptyPayment(Map<String, String> map) {
+        super(map);
+        this.originalType = map.remove("originalType");
+        this.originalData = map;
     }
 
     @Override
@@ -22,13 +27,27 @@ public class EmptyPayment extends Payment {
 
     @Override
     public ListenableFuture<Boolean> canAfford(PassUser passUser) {
-        SettableFuture<Boolean> result = SettableFuture.create();
-        result.set(true);
-        return result;
+        return instantFuture(true);
     }
 
     @Override
     public Map<String, String> serialize() {
         return new HashMap<>();
+    }
+
+    @Override
+    public String toString() {
+        if (originalType != null && !originalType.isEmpty()) {
+            return "Bruch (eig. " + originalType + ")";
+        }
+        return "Nichts";
+    }
+
+    public String getOriginalType() {
+        return originalType;
+    }
+
+    public Map<String, String> getOriginalData() {
+        return originalData;
     }
 }

@@ -43,7 +43,7 @@ public class PassUserImpl implements PassUser {
 
     @Override
     public void addPass(Pass pass) {
-        ActivePass activePass = new ActivePass(this, pass, new PassProgress(1, 0.0D), new HashSet<>());
+        ActivePass activePass = new ActivePass(this, pass, new PassProgress(0, 0.0D), new HashSet<>());
         activePasses.add(activePass);
         userRepository.insertPass(activePass);
     }
@@ -78,6 +78,11 @@ public class PassUserImpl implements PassUser {
     @Override
     public void disableCollecting() {
         collecting = false;
+    }
+
+    @Override
+    public void updateActivePass(ActivePass activePass) {
+        userRepository.update(activePass);
     }
 
     @Override

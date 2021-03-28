@@ -40,9 +40,10 @@ public class PassesConfigLoader {
         }}
     );
     private static final PassesConfig DEFAULT_CONFIG = new PassesConfig(
+        false,
         Sets.newHashSet(
-            new DefaultPass(0, Icon.builder("STONE").build(), DEFAULT_LEVELS, DEFAULT_LEVEL_CONFIGURATION, new EmptyPayment()),
-            new EventPassImpl(1, Icon.builder("STONE").build(), new Date(0L), new Date(), DEFAULT_LEVELS, DEFAULT_LEVEL_CONFIGURATION, new EmptyPayment())
+            new DefaultPass(0, Icon.builder("STONE").build(), DEFAULT_LEVELS, DEFAULT_LEVEL_CONFIGURATION, new EmptyPayment(new HashMap<>())),
+            new EventPassImpl(1, Icon.builder("STONE").build(), new Date(0L), new Date(), DEFAULT_LEVELS, DEFAULT_LEVEL_CONFIGURATION, new EmptyPayment(new HashMap<>()))
         ),
         Sets.newHashSet(new Milestone(DefaultMilestones.ROUND, 1.0D))
     );

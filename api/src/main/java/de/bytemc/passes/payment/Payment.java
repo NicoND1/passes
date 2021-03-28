@@ -1,6 +1,7 @@
 package de.bytemc.passes.payment;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.SettableFuture;
 import de.bytemc.passes.user.PassUser;
 
 import java.util.Map;
@@ -22,6 +23,14 @@ public abstract class Payment {
 
     public abstract ListenableFuture<Boolean> canAfford(PassUser passUser);
 
+    protected ListenableFuture<Boolean> instantFuture(boolean result) {
+        SettableFuture<Boolean> future = SettableFuture.create();
+        future.set(result);
+        return future;
+    }
+
     public abstract Map<String, String> serialize();
+
+    public abstract String toString();
 
 }

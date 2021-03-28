@@ -1,8 +1,12 @@
 package de.bytemc.passes.icon;
 
 import com.google.common.base.Objects;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.StringJoiner;
 
 /**
@@ -13,11 +17,11 @@ public class Icon {
     private final FancyColorString name;
     private final FancyColorString[] description;
     private final String material;
-    private final short durability;
+    private final short durabilities[];
     private final int amount;
     private final String skullTexture;
 
-    private Icon(String material, short durability, int amount, String name, String[] description, String skullTexture) {
+    private Icon(String material, short durabilities[], int amount, String name, String[] description, String skullTexture) {
         if (name == null) {
             this.name = null;
         } else {
@@ -29,16 +33,16 @@ public class Icon {
             this.description = Arrays.stream(description).map(FancyColorString::new).toArray(FancyColorString[]::new);
         }
         this.material = material;
-        this.durability = durability;
+        this.durabilities = durabilities;
         this.amount = amount;
         this.skullTexture = skullTexture;
     }
 
-    public String getName(char colorCode) {
+    public String getName(Object... args) {
         if (name == null) {
             return null;
         }
-        return name.getString(colorCode);
+        return name.getString(args);
     }
 
     public String getRawName() {
@@ -48,16 +52,22 @@ public class Icon {
         return name.getRawString();
     }
 
-    public String[] getDescription(char colorCode) {
+    public String[] getDescription(Object... args) {
         if (description == null) {
             return null;
         }
         String[] array = new String[description.length];
         for (int i = 0; i < description.length; i++) {
             FancyColorString fancyColorString = description[i];
-            array[i] = fancyColorString.getString(colorCode);
+            array[i] = fancyColorString.getString(args);
         }
-        return array;
+
+        List<String> strings = new ArrayList<>(array.length);
+        for (String string : array) {
+            String[] split = string.split("\n");
+            strings.addAll(Arrays.asList(split));
+        }
+        return strings.toArray(new String[0]);
     }
 
     public String[] getRawDescription() {
@@ -76,7 +86,11 @@ public class Icon {
     }
 
     public short getDurability() {
-        return durability;
+        return durabilities[0];
+    }
+
+    public short getDurability(int i) {
+        return durabilities[i];
     }
 
     public int getAmount() {
@@ -106,7 +120,7 @@ public class Icon {
             .add("material=" + material)
             .add("name='" + name + "'")
             .add("description=" + Arrays.toString(description))
-            .add("durability=" + durability)
+            .add("durabilities=" + Arrays.toString(durabilities))
             .add("amount=" + amount)
             .toString();
     }
@@ -118,7 +132,7 @@ public class Icon {
     public static class Builder {
 
         private final String material;
-        private short durability;
+        private short[] durabilities;
         private int amount;
         private String name;
         private String[] description;
@@ -128,8 +142,17 @@ public class Icon {
             this.material = material;
         }
 
-        public Builder durability(short durability) {
-            this.durability = durability;
+        public Builder durabilities(short[] durabilities) {
+            this.durabilities = durabilities;
+            return this;
+        }
+
+        public Builder durabilities(JsonArray array) {
+            this.durabilities = new short[array.size()];
+            int i = 0;
+            for (JsonElement jsonElement : array) {
+                this.durabilities[i] = jsonElement.getAsShort();
+            }
             return this;
         }
 
@@ -154,7 +177,7 @@ public class Icon {
         }
 
         public Icon build() {
-            return new Icon(material, durability, amount, name, description, skullTexture);
+            return new Icon(material, durabilities, amount, name, description, skullTexture);
         }
 
     }

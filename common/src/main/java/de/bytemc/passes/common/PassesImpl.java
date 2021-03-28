@@ -29,12 +29,14 @@ public class PassesImpl implements Passes {
     private final PassUserRepository users;
     private final PlayersProvider playersProvider;
     private final PaymentRepository payments;
+    private boolean onlyCollect;
 
-    public PassesImpl(PassRepository passes, PassUserRepository users, PlayersProvider playersProvider, PaymentRepository payments) {
+    public PassesImpl(PassRepository passes, PassUserRepository users, PlayersProvider playersProvider, PaymentRepository payments, boolean onlyCollect) {
         this.passes = passes;
         this.users = users;
         this.playersProvider = playersProvider;
         this.payments = payments;
+        this.onlyCollect = onlyCollect;
     }
 
     @Override
@@ -96,5 +98,15 @@ public class PassesImpl implements Passes {
         }
 
         return result;
+    }
+
+    @Override
+    public boolean onlyCollect() {
+        return onlyCollect;
+    }
+
+    @Override
+    public void setOnlyCollect(boolean onlyCollect) {
+        this.onlyCollect = onlyCollect;
     }
 }

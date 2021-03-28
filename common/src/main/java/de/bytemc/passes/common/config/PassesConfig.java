@@ -10,12 +10,18 @@ import java.util.Set;
  */
 public class PassesConfig {
 
+    private final boolean onlyCollect;
     private final Set<Pass> passes;
     private final Set<Milestone> defaultMilestones;
 
-    protected PassesConfig(Set<Pass> passes, Set<Milestone> defaultMilestones) {
+    protected PassesConfig(boolean onlyCollect, Set<Pass> passes, Set<Milestone> defaultMilestones) {
+        this.onlyCollect = onlyCollect;
         this.passes = passes;
         this.defaultMilestones = defaultMilestones;
+    }
+
+    public boolean onlyCollect() {
+        return onlyCollect;
     }
 
     public Set<Pass> getPasses() {

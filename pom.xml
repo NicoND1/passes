@@ -22,7 +22,15 @@
     <!-- Module versions -->
     <version.api>1.0.0-SNAPSHOT</version.api>
     <version.common>1.0.0-SNAPSHOT</version.common>
+    <version.spigot>1.0.0-SNAPSHOT</version.spigot>
   </properties>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>bytemc-snapshots</id>
+      <url>http://37.114.62.242:8081/repository/maven-snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
 
   <repositories>
     <repository>
@@ -82,6 +90,19 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <version>3.1.0</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.2.0</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>javadoc</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

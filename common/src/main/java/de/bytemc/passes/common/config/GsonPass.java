@@ -56,6 +56,7 @@ public class GsonPass implements JsonSerializer<Pass>, JsonDeserializer<Pass> {
         result.add("icon", serializationContext.serialize(pass.getIcon()));
         result.add("levels", writeLevelsJsonArray(pass));
         result.add("price", writePayment(pass.getPrice()));
+        result.add("levelConfiguration", writeLevelConfiguration(pass.levelConfiguration(), serializationContext));
         if (type == PassType.EVENT) {
             writeEventPass(pass, result);
         }
@@ -98,6 +99,14 @@ public class GsonPass implements JsonSerializer<Pass>, JsonDeserializer<Pass> {
         EventPass eventPass = (EventPass) pass;
         result.addProperty("start", eventPass.getStart().getTime());
         result.addProperty("end", eventPass.getEnd().getTime());
+    }
+
+    private JsonObject writeLevelConfiguration(PassLevelConfiguration levelConfiguration, JsonSerializationContext serializationContext) {
+        JsonObject result = new JsonObject();
+        for (PassLevelState value : PassLevelState.values()) {
+            result.add(value.name(), serializationContext.serialize(levelConfiguration.getIcon(value), Icon.class));
+        }
+        return result;
     }
 
     @Override

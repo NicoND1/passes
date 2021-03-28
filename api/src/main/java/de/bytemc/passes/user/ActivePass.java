@@ -3,6 +3,7 @@ package de.bytemc.passes.user;
 import com.google.common.base.Objects;
 import de.bytemc.passes.Pass;
 import de.bytemc.passes.level.PassLevel;
+import de.bytemc.passes.payment.Payment;
 
 import java.util.Collections;
 import java.util.Set;
@@ -40,20 +41,35 @@ public class ActivePass {
 
     public int addExp(double exp) {
         int levelIncrement = 0;
-        PassLevel level = pass.getLevel(progress.getLevel());
+        PassLevel nextLevel = pass.getLevel(progress.getLevel() + 1);
 
-        while (exp + progress.getExp() >= level.getNeededExp()) {
+        while (nextLevel != null && exp + progress.getExp() >= nextLevel.getNeededExp()) {
+            collectableLevels.add(nextLevel.getLevel());
             levelIncrement++;
-            exp -= level.getNeededExp() - progress.getExp();
-            level = pass.getLevel(progress.getLevel() + levelIncrement);
-            collectableLevels.add(level.getLevel());
+            System.out.println("Level up! exp is " + exp + " needed " + nextLevel.getNeededExp() + " : " + progress.getExp());
+            exp -= nextLevel.getNeededExp() - progress.getExp();
+            System.out.println("Level up!2 exp is " + exp + " needed " + nextLevel.getNeededExp() + " : " + progress.getExp());
+            progress.update(progress.getLevel(), 0);
+            nextLevel = pass.getLevel(nextLevel.getLevel() + 1);
         }
-        progress.update(progress.getLevel() + levelIncrement, exp);
+        System.out.println("Finished! exp is " + exp + " needed " + (nextLevel == null ? -1 : nextLevel.getNeededExp()) + " : " + progress.getExp());
+        progress.update(progress.getLevel() + levelIncrement, progress.getExp() + exp);
         return levelIncrement;
     }
 
     public Set<Integer> getCollectableLevels() {
         return Collections.unmodifiableSet(collectableLevels);
+    }
+
+    public boolean collectLevel(int level) {
+        boolean result = collectableLevels.remove(level);
+        if (result) {
+            PassLevel passLevel = pass.getLevel(level);
+            for (Payment reward : passLevel.getRewards()) {
+                reward.use(user);
+            }
+        }
+        return result;
     }
 
     public String formatCollectableLevels() {
@@ -67,7 +83,8 @@ public class ActivePass {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ActivePass that = (ActivePass) o;
-        return Objects.equal(getUser(), that.getUser());
+        return Objects.equal(getUser(), that.getUser()) &&
+            Objects.equal(getPass(), that.getPass());
     }
 
     @Override
@@ -78,7 +95,7 @@ public class ActivePass {
     @Override
     public String toString() {
         return new StringJoiner(", ", ActivePass.class.getSimpleName() + "[", "]")
-            .add("user=" + user)
+            .add("user=" + user.getUUID())
             .add("pass=" + pass)
             .add("progress=" + progress)
             .add("collectableLevels=" + collectableLevels)

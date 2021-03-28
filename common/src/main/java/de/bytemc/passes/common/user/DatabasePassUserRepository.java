@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -39,11 +40,13 @@ public class DatabasePassUserRepository implements PassUserRepository {
     private final Map<UUID, ListenableFuture<PassUser>> userCache = Maps.newConcurrentMap();
     private final ConnectionFactory connectionFactory;
     private final PassRepository passRepository;
+    private final Supplier<Boolean> onlyCollect;
     private final Executor executor;
 
-    public DatabasePassUserRepository(ConnectionFactory connectionFactory, PassRepository passRepository) {
+    public DatabasePassUserRepository(ConnectionFactory connectionFactory, PassRepository passRepository, Supplier<Boolean> onlyCollect) {
         this.connectionFactory = connectionFactory;
         this.passRepository = passRepository;
+        this.onlyCollect = onlyCollect;
         this.executor = Executors.newFixedThreadPool(3);
     }
 
@@ -74,7 +77,9 @@ public class DatabasePassUserRepository implements PassUserRepository {
                 }
                 statement.close();
 
-                checkUnassignedPasses(user);
+                if (!onlyCollect.get()) {
+                    checkUnassignedPasses(user);
+                }
                 future.set(user);
             } catch (SQLException exception) {
                 future.setException(exception);
@@ -166,6 +171,7 @@ public class DatabasePassUserRepository implements PassUserRepository {
         });
     }
 
+    // TODO: Only update differences
     void update(ActivePass activePass) {
         Pass pass = activePass.getPass();
         PassProgress progress = activePass.getProgress();

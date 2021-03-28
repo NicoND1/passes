@@ -11,6 +11,7 @@
 
   <groupId>de.bytemc.passes</groupId>
   <artifactId>spigot</artifactId>
+  <version>${version.spigot}</version>
 
   <repositories>
     <repository>
@@ -34,6 +35,12 @@
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
+      <version>1.8.8-R0.1-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.bukkit</groupId>
+      <artifactId>craftbukkit</artifactId>
       <version>1.8.8-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>

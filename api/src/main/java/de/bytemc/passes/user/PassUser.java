@@ -41,4 +41,6 @@ public interface PassUser extends Collectable {
      */
     Map<ActivePass, Integer> addExp(double exp);
 
+    void updateActivePass(ActivePass activePass);
+
 }
