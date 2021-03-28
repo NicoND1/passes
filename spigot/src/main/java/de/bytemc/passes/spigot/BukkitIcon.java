@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import de.bytemc.passes.icon.Icon;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -26,6 +27,7 @@ public class BukkitIcon {
         if (icon.getRawDescription() != null) {
             itemMeta.setLore(Arrays.asList(icon.getDescription(args)));
         }
+        itemMeta.addItemFlags(ItemFlag.values());
         String link = icon.getSkullTexture();
         if (link != null) {
             try {

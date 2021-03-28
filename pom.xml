@@ -22,7 +22,7 @@
     <!-- Module versions -->
     <version.api>1.0.0-SNAPSHOT</version.api>
     <version.common>1.0.0-SNAPSHOT</version.common>
-    <version.spigot>1.0.0-SNAPSHOT</version.spigot>
+    <version.spigot>1.0.1-SNAPSHOT</version.spigot>
   </properties>
 
   <distributionManagement>
