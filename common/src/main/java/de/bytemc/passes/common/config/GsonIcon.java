@@ -44,8 +44,13 @@ public class GsonIcon implements JsonSerializer<Icon>, JsonDeserializer<Icon> {
     public Icon deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
         JsonObject object = jsonElement.getAsJsonObject();
         Icon.Builder iconBuilder = Icon.builder(object.get("material").getAsString())
-            .amount(object.get("amount").getAsInt())
-            .durabilities(object.get("durabilities").getAsJsonArray());
+            .amount(object.get("amount").getAsInt());
+        if (object.has("durability")) {
+            iconBuilder.durabilities(new short[] {object.get("durability").getAsShort()});
+        } else {
+            iconBuilder.durabilities(object.get("durabilities").getAsJsonArray());
+        }
+
         if (object.has("name")) {
             iconBuilder.name(object.get("name").getAsString());
         }
